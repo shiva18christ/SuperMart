@@ -30,7 +30,7 @@ public class JWTUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())  // ✅ Correct method for HMAC keys
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -49,10 +49,10 @@ public class JWTUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setHeaderParam("typ", "JWT")  // ✅ Correct syntax for setting the JWT type
+                .setHeaderParam("typ", "JWT")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // ✅ 1 hour expiry
-                .signWith(getSigningKey()) // ✅ Proper signing
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(getSigningKey())
                 .compact();
     }
 
