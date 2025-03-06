@@ -4,6 +4,7 @@ import com.task.Supermarket.Services.UserDetailServiceImpl;
 import com.task.Supermarket.Services.UserServices;
 import com.task.Supermarket.Utility.JWTUtil;
 import com.task.Supermarket.base.User;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RestController
 @RequestMapping("/public")
+@Tag(name = "Signup and login API",description = "new user Signup,Existing users login")
 public class PublicController {
 
     @Autowired

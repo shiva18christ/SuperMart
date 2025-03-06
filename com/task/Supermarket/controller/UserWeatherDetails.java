@@ -3,6 +3,8 @@ package com.task.Supermarket.controller;
 import com.task.Supermarket.ApiResponse.WeatherResponse;
 import com.task.Supermarket.Services.WeatherServices;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mall/info")
+@Tag(name="Weather API",description = "see weather of the entered location")
 public class UserWeatherDetails {
     @Autowired
     private WeatherResponse weatherResponse;
@@ -23,6 +26,8 @@ public class UserWeatherDetails {
     private WeatherServices weatherServices;
 
     @GetMapping("/information")
+    @Operation(summary="Get Weather and location details of the current city")
+
     public ResponseEntity<?> weatherInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         WeatherResponse weatherResponse = weatherServices.getWeather("Bangalore");

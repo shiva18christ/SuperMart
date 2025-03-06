@@ -4,6 +4,7 @@ import com.task.Supermarket.Services.ShopcontrollerServices;
 import com.task.Supermarket.Services.UserServices;
 import com.task.Supermarket.base.Shop;
 import com.task.Supermarket.base.User;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.logging.log4j.util.LambdaUtil.getAll;
+
 
 @RestController
 @RequestMapping("/mall")
+@Tag(name="Product APIs",description = "Add,View,Update and delete products of users")
 public class ShopController {
     @Autowired
     public ShopcontrollerServices stuff;
@@ -56,35 +58,38 @@ public class ShopController {
     }
 
     @GetMapping("/id/{id_no}")
-    public ResponseEntity<Shop> getValueById(@PathVariable ObjectId id_no) {
+    public ResponseEntity<Shop> getValueById(@PathVariable String id_no) {
+        ObjectId objectId=new ObjectId(id_no);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userServices.findBYUserName(userName);
-        List<Shop> collect = user.getShop().stream().filter(x -> x.getProduct_Id().equals(id_no)).collect(Collectors.toList());
+        List<Shop> collect = user.getShop().stream().filter(x -> x.getProduct_Id().equals(objectId)).collect(Collectors.toList());
         if (!collect.isEmpty()) {
-            return new ResponseEntity<>(stuff.findById(id_no), HttpStatus.OK);
+            return new ResponseEntity<>(stuff.findById(objectId), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
     @DeleteMapping("/id/{id_no}")
-    public ResponseEntity<?> deleteValueById(@PathVariable ObjectId id_no) {
+    public ResponseEntity<?> deleteValueById(@PathVariable String id_no) {
+        ObjectId objectId=new ObjectId(id_no);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        stuff.deleteById(id_no, userName);
+        stuff.deleteById(objectId, userName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/id/{id_no}")
-    public ResponseEntity<Shop> updateById(@PathVariable ObjectId id_no, @RequestBody Shop body) {
+    public ResponseEntity<Shop> updateById(@PathVariable String id_no, @RequestBody Shop body) {
+        ObjectId objectId=new ObjectId(id_no);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userServices.findBYUserName(userName);
-        List<Shop> collect = user.getShop().stream().filter(x -> x.getProduct_Id().equals(id_no)).collect(Collectors.toList());
+        List<Shop> collect = user.getShop().stream().filter(x -> x.getProduct_Id().equals(objectId)).collect(Collectors.toList());
         if (!collect.isEmpty()) {
 
-            Shop existing_Data = stuff.findById(id_no);
+            Shop existing_Data = stuff.findById(objectId);
             if (existing_Data == null) {
 
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
